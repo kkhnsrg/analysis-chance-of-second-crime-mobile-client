@@ -11,32 +11,29 @@ import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity() {
+private const val API_URL = "http://10.6.177.78:8080/result"
+private const val PARAM_PART_URL = "?"
+private const val PARAM_DELIMITER_URL = "&"
+private const val PARAM_MOTHER_URL = "hasMother="
+private const val PARAM_FATHER_URL = "hasFather="
+private const val PARAM_SEVERITY_URL = "firstCrimeSeverity="
 
-    val API_URL = "http://localhost:8080/result"
-    val PARAM_PART_URL = "?"
-    val PARAM_DELIMETER_URL = "&"
-    val PARAM_MOTHER_URL = "hasMother="
-    val PARAM_FATHER_URL = "hasFather="
-    val PARAM_SEVERITY_URL = "firstCrimeSeverity="
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        severityNumberPicker.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
-        severityNumberPicker.minValue = 1
-        severityNumberPicker.maxValue = 5
-
+        numberPickerConfig()
         buttonHandler()
         changeResultTv()
     }
 
     private fun buttonHandler() {
-        val button = submitButton.setOnClickListener {
+        submitButton.setOnClickListener {
             val request = Volley.newRequestQueue(this)
             val requestValue = API_URL.plus(PARAM_PART_URL)
-                .plus(PARAM_MOTHER_URL.plus(hasMotherCheckbox.isChecked)).plus(PARAM_DELIMETER_URL)
-                .plus(PARAM_FATHER_URL.plus(hasFatherCheckbox.isChecked)).plus(PARAM_DELIMETER_URL)
+                .plus(PARAM_MOTHER_URL.plus(hasMotherCheckbox.isChecked)).plus(PARAM_DELIMITER_URL)
+                .plus(PARAM_FATHER_URL.plus(hasFatherCheckbox.isChecked)).plus(PARAM_DELIMITER_URL)
                 .plus(PARAM_SEVERITY_URL.plus(severityNumberPicker.value))
             val objectRequest = JsonObjectRequest(
                 Request.Method.GET,
@@ -56,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeResultTv() {
-        severityNumberPicker.setOnScrollListener { view, scrollState -> clearResult() }
+        severityNumberPicker.setOnScrollListener { _, _ -> clearResult() }
         hasMotherCheckbox.setOnClickListener { clearResult() }
         hasFatherCheckbox.setOnClickListener { clearResult() }
     }
@@ -65,6 +62,11 @@ class MainActivity : AppCompatActivity() {
         if (resultTextView.text != "") resultTextView.text = ""
     }
 
+    private fun numberPickerConfig(){
+        severityNumberPicker.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+        severityNumberPicker.minValue = 1
+        severityNumberPicker.maxValue = 5
+    }
 }
 
 
