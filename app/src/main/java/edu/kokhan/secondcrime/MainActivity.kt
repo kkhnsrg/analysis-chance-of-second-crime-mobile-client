@@ -1,5 +1,6 @@
 package edu.kokhan.secondcrime
 
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,12 +12,15 @@ import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 
-private const val API_URL = "http://10.6.177.78:8080/result"
+private const val API_URL = "http://crime-analysis.herokuapp.com/result"
 private const val PARAM_PART_URL = "?"
 private const val PARAM_DELIMITER_URL = "&"
 private const val PARAM_MOTHER_URL = "hasMother="
 private const val PARAM_FATHER_URL = "hasFather="
 private const val PARAM_SEVERITY_URL = "firstCrimeSeverity="
+
+private  const val WARNING_MESSAGE = "It's dangerous criminal!"
+private  const val OK_MESSAGE = "Don't worry about him"
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,10 +44,14 @@ class MainActivity : AppCompatActivity() {
                 requestValue,
                 null,
                 Response.Listener<JSONObject> { response ->
-                    val strResp = response.toString()
-                    resultTextView.text = response.getString("result")
-                    Log.e("Request", requestValue)
-                    Log.e("Response", strResp)
+                    val respValue = response.getString("result")
+                    if(respValue.toDouble() > 0.5) {
+                        resultTextView.text = WARNING_MESSAGE
+                        resultTextView.setTextColor(Color.rgb(220,23,23))
+                    } else {
+                        resultTextView.text = OK_MESSAGE
+                        resultTextView.setTextColor(Color.rgb(52,185,79))
+                    }
                     Log.e("REST", "OK")
                 },
                 Response.ErrorListener { Log.e("REST", "ERROR") }
