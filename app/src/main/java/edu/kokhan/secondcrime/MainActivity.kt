@@ -35,10 +35,10 @@ class MainActivity : AppCompatActivity() {
     private fun buttonHandler() {
         submitButton.setOnClickListener {
             val request = Volley.newRequestQueue(this)
-            val requestValue = API_URL.plus(PARAM_PART_URL)
-                .plus(PARAM_MOTHER_URL.plus(hasMotherCheckbox.isChecked)).plus(PARAM_DELIMITER_URL)
-                .plus(PARAM_FATHER_URL.plus(hasFatherCheckbox.isChecked)).plus(PARAM_DELIMITER_URL)
-                .plus(PARAM_SEVERITY_URL.plus(severityNumberPicker.value))
+            val requestValue = "$API_URL$PARAM_PART_URL" +
+                    "$PARAM_MOTHER_URL${hasMotherCheckbox.isChecked}$PARAM_DELIMITER_URL" +
+                    "$PARAM_FATHER_URL${hasMotherCheckbox.isChecked}$PARAM_DELIMITER_URL" +
+                    "$PARAM_SEVERITY_URL${severityNumberPicker.value}"
             val objectRequest = JsonObjectRequest(
                 Request.Method.GET,
                 requestValue,
